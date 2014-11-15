@@ -1,0 +1,15 @@
+<div class='row'>
+  <div class='col-sm-4 col-sm-offset-1 col-md-4 col-md-offset-1 sidebar' style='text-align:center' id='query_container'>
+    <div class="input-group">
+      <span class="input-group-addon">MeetId</span>
+      <input ng-model='meetId' type="text" class="form-control" ng-keyup="$event.keyCode == 13 ? checkMeetLog(meetId): null" placeholder="MeetId">
+            <span class="input-group-btn">
+      <button class="btn btn-default" type="button" ng-click="jumpToMeetObject(meetId)" ng-show='afterSubmit'>Go to Meet Object</button>
+      </span>
+    </div>
+  </div>
+        <div id="sidebar-resizer" ng-show="showdetail" resizer="vertical" resizer-left="#query_container" resizer-right='#renderjson' class='col-sm-offset-5 col-md-offset-5 resizer'></div>
+  <div class='col-sm-7 col-sm-offset-5 col-md-7 col-md-offset-5 main' ng-show='showdetail' id='renderjson'>
+    <div></div>
+  </div>
+</div>

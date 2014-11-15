@@ -1,0 +1,25 @@
+<div class='row'>
+    <div id='query_container' class='col-sm-{{queryBarWidth}} col-sm-offset-1 col-md-{{queryBarWidth}} col-md-offset-1 sidebar' style='padding:10px 20px;height:90px;'>
+        <div class="input-group">
+            <span class="input-group-addon">Begin with: </span>
+            <input ng-model='query' ng-keyup="$event.keyCode == 13 ? refreshResults(query) : null" type='text' class="form-control" placeholder='Query'>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon">Filter: </span>
+            <input ng-model='reportsFilter.key' type='text' class="form-control" placeholder='Filter'>
+        </div>
+    </div>
+    <div id="reportsList" class='col-sm-{{queryBarWidth}} col-sm-offset-1 col-md-{{queryBarWidth}} col-md-offset-1 sidebar' style='margin-top:90px'>
+        <ol>
+            <li ng-repeat="report in reports | filter:reportsFilter">
+                <span style='cursor:pointer;cursor:hand;' ng-click="getDetail(report.key)" ng-mouseover="$parent.showkey=report.key">
+                <a>{{report.key}}</a>
+                <button class='btn btn-default' style='padding:0px 12px' ng-click="deleteReport(report)" ng-show="$parent.showkey==report.key">delete</button>
+                </span>
+            </li>
+        </ol>
+    </div>
+    <div id="sidebar-resizer" ng-show="showdetail" resizer="vertical" resizer-left="#reportsList" resizer-leftt="#query_container" resizer-right='#detailContainer' class='col-sm-offset-5 col-md-offset-5 resizer'></div>
+    <div id="detailContainer" class='col-sm-{{11-queryBarWidth}} col-sm-offset-{{1+1*queryBarWidth}} col-md-{{11-queryBarWidth}} col-md-offset-{{1+1*queryBarWidth}} main' ng-show='showdetail'><pre>{{detail}}</pre>
+    </div>
+</div>

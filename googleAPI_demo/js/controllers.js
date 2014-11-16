@@ -23,6 +23,7 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
         };
         var map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var geolocation = new google.maps.LatLng(
@@ -32,12 +33,50 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
                     geolocation));
             });
         }
+
+	
+	$scope.downloadUrl= function(url,callback){
+            var request = window.ActiveXObject ?
+                new ActiveXObject('Microsoft.XMLHTTP') :
+                new XMLHttpRequest;
+	    
+            request.onreadystatechange = function() {
+                if (request.readyState == 4) {
+                    request.onreadystatechange = $scope.doNothing;
+                    callback(request, request.status);
+                }
+            };
+	    
+            request.open('GET', url, true);
+            request.send(null);
+        }
+
+	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
+            var xml = data.responseXML;
+            var markers = xml.documentElement.getElementsByTagName("marker");
+            for (var i = 0; i < markers.length; i++) {
+                console.log(markers[i].getAttribute("lat"));
+                console.log(markers[i].getAttribute("lon"));
+                var point = new google.maps.LatLng(
+                    parseFloat(markers[i].getAttribute("lat")),
+                    parseFloat(markers[i].getAttribute("lon")));
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: point,
+                    icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
+                });
+            }
+        });
+
+
+
+        $scope.doNothing = function() {}
+
         $scope.changeMapCenter = function() {
             var place = autocomplete.getPlace();
             if (!place.geometry) {
                 return;
             }
-
             // If the place has a geometry, then present it on a map.
             if (place.geometry.viewport) {
                 map.fitBounds(place.geometry.viewport);

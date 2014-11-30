@@ -1,5 +1,5 @@
 <?php 
-    require_once(dirname(__FILE__) . '/db_settings.php');
+    require_once(dirname(__FILE__) . '/includes/db_settings.php');
 
     // Start XML file, create parent node
     $dom = new DOMDocument("1.0");

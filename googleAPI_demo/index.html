@@ -16,9 +16,9 @@
   </head>
   <body ng-controller="mainpanelCtrl">
       <div class = 'navbar navbar-default navbar-fixed-top' role='navigation'>
-      <div class="container-fluid" style='background-color:#0082D5'>
+      <div class="container-fluid" style="background-image: url(./img/banner.png); height: 100px; border: 1px solid #0082D5">
+	<div style="background-color:rgba(225, 225, 225, .7); margin-top:10px; height:80px; width:400px; padding:20px; border-radius:10px ">LOGO</div>
         <div class='navbar-header'>
-          <a class="navbar-brand" href="#" style='padding:5px;color:#DDDDDD'><img style='margin-right:200px'>Google API Demo</a>
         </div>
         <p class="navbar-text" style="color:black">{{prompt}}</p>
       </div>
@@ -26,7 +26,7 @@
     <div class="container-fluid">
       <div class='col-sm-1 col-md-1 sidebar'>
         <ul class='nav nav-sidebar'>
-          <li><a id='utilities_0' style='' href="#/demo1">Demo1</a></li>
+          <li><a id='utilities_0' style='' href="#/demo1">Search</a></li>
         </ul>
       </div>
       <div ng-view></div>

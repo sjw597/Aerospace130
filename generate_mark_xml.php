@@ -6,7 +6,7 @@
     $node = $dom->createElement("markers");
     $parnode = $dom->appendChild($node);
     // TODO: Add satellite name when it is added to DB.
-    $sql = 'SELECT LAT, LON FROM tip';
+    $sql = 'SELECT LAT, LON, NORAD_CAT_ID, MSG_EPOCH, HIGH_INTEREST FROM tip';
     $results = $conn->query($sql);
 
     if($results === false) {
@@ -23,6 +23,9 @@
         $newnode = $parnode->appendChild($node);
         $newnode->setAttribute("lat", $row['LAT']);
         $newnode->setAttribute("lon", $row['LON']);
+	$newnode->setAttribute("id", $row['NORAD_CAT_ID']);
+	$newnode->setAttribute("time", $row['MSG_EPOCH']);
+	$newnode->setAttribute("intr", $row['HIGH_INTEREST']);
     }
     echo $dom->saveXML();
 ?>

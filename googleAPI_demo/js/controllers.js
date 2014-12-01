@@ -51,6 +51,7 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
             request.send(null);
         }
 
+/*
 	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
@@ -67,8 +68,79 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
                 });
             }
         });
+*/
 
-
+	$scope.downloadUrl("http://107.170.221.211/ta_workspace/Aerospace130/generate_mark_xml.php", function(data) {
+	    var xml = data.responseXML;
+            var markers = xml.documentElement.getElementsByTagName("marker");
+	    //var MultiMap = require("collections/multi-map");
+	    var objToPath = {};
+            for (var i = 0; i < markers.length; i++) {
+		//console.log(i);
+		var objID = markers[i].getAttribute("id");
+		//console.log(objID);
+		if(objID in objToPath) {
+		    //add the marker to the end of the existing array
+		    //console.log("in path");
+		    var arr = objToPath[objID];
+		    arr[arr.length] = markers[i];
+		} else {
+		    //make a new array with the marker in it, and put in objToPath
+		    //console.log("not in path");
+		    var arr = new Array(markers[i]);
+		    objToPath[objID] = arr;
+		}
+            }
+	    //now objToPath is filled
+	    //sort each array in objToPath by time and draw the path on the map
+	    for(var pathID in objToPath) {
+		//console.log(pathID);
+		//console.log(objToPath[pathID].length);
+		if(pathID > 11000 || pathID < 10000) //in this example, only plot a few objects
+		    continue;
+		var path = objToPath[pathID];
+		path.sort(function(a,b) {
+		   return a.getAttribute("time").localeCompare(b.getAttribute("time")); 
+		});
+		/*
+		for(var i = 0; i < path.length; i++) {
+		    console.log(path[i].getAttribute("time"));
+		}
+		*/
+		var highInterest = false;
+		var currentPathCoordinates = []
+		for(var i = 0; i < path.length; i++) {
+		    if(path[i].getAttribute("intr").toLowerCase() == "y")
+			highInterest = true;
+		    currentPathCoordinates[currentPathCoordinates.length] = 
+			new google.maps.LatLng(parseFloat(path[i].getAttribute("lat")),
+					       parseFloat(path[i].getAttribute("lon")));
+		}
+		var currentPath = new google.maps.Polyline({
+		    path: currentPathCoordinates,
+		    geodesic: true,
+		    strokeColor: '#'+Math.floor(Math.random()*16777215).toString(16), //random color
+		    strokeOpacity: 1.0,
+		    strokeWeight: highInterest ? 4 : 2
+		});
+		currentPath.setMap(map);
+	    }
+	    //removed the marker thing for this
+	    /*
+            for (var i = 0; i < markers.length; i++) {
+                //console.log(markers[i].getAttribute("lat"));
+                //console.log(markers[i].getAttribute("lon"));
+                var point = new google.maps.LatLng(
+                    parseFloat(markers[i].getAttribute("lat")),
+                    parseFloat(markers[i].getAttribute("lon")));
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: point,
+                    icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
+                });
+            }
+	    */
+	});
 
         $scope.doNothing = function() {}
 

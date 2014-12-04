@@ -9,6 +9,7 @@ if (login_check($mysqli) == true) {
 } else {
     $logged = 'out';
 }
+echo $logged;
 ?>
 <!DOCTYPE html>
 <html>

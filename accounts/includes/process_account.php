@@ -12,7 +12,8 @@ if (isset($_POST['username'], $_POST['p'])) {
 	 
 		if (login($username, $password, $conn) == true) {
 			// Login success 
-			header('Location: ../protected_page.php');
+			header('Location: ../../googleAPI_demo/index.php');
+			exit();
 		} else {
 			// Login failed 
 			header('Location: ../index.php?error=1');

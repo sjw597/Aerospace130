@@ -159,6 +159,9 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
         }
     }
 ]);
+
+consoleControllers.controller('accountCtrl', function() {});
+
 consoleControllers.controller('blankCtrl', function() {});
 
 //credit to http://stackoverflow.com/questions/18368485/angular-js-resizable-div-directive

@@ -5,9 +5,9 @@ MX_DebugConsoleApp.config(['$routeProvider',
         $routeProvider.when('/demo1', {
             templateUrl: 'partials/demo1.html',
             controller: 'demo1Ctrl'
-        }).when('/blank', {
-            templateUrl: 'partials/blank.html',
-            controller: 'blankCtrl'
+        }).when('/account_settings', {
+            templateUrl: 'partials/account_settings.html',
+            controller: 'demo1Ctrl'
         }).otherwise({
             redirectTo: '/blank'
         });

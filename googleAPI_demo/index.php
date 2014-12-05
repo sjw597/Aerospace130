@@ -1,5 +1,6 @@
 <?php
 include_once '../accounts/includes/db_acc_settings.php';
+include_once('includes/db_settings.php');
 include_once '../accounts/includes/functions.php';
 ?>
 
@@ -60,7 +61,7 @@ include_once '../accounts/includes/functions.php';
         <ul class='nav nav-sidebar'>
           <li><a id='utilities_0' style='' href="#/demo1">Search</a></li>
 		  <?php if ($logged == 'in'){ ?>
-		  <li><a id='utilities_1' style='' href="#/AccountSettings">Account settings</a></li>
+		  <li><a id='utilities_0' style='' href="#/account_settings">Account settings</a></li>
 		  <?php } ?>
         </ul>
       </div>

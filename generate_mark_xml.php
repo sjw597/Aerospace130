@@ -27,7 +27,7 @@
 	}
 	
     // TODO: Add satellite name when it is added to DB.
-    $sql = 'SELECT NAME, LAT, LON, NORAD_CAT_ID, MSG_EPOCH, HIGH_INTEREST FROM tip';
+    $sql = 'SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), HIGH_INTEREST FROM tip GROUP BY NAME';
     $results = $conn->query($sql);
 
     if($results === false) {

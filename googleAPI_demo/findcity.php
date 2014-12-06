@@ -2,7 +2,7 @@
 	$regionId   = $_GET['region'];
 	include('../includes/db_settings.php');
 
-	$query="SELECT city_name FROM city WHERE region_id='$regionId'";
+	$query="SELECT city_name, lattitude, longitude FROM city WHERE region_id='$regionId'";
 	$result=$conn->query($query);
 ?>
 <select name="city">

@@ -23,9 +23,10 @@ include_once '../accounts/includes/functions.php';
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
   </head>
   <body ng-controller="mainpanelCtrl">
+   
  <?php 
  sec_session_start(); 
-  if (login_check($conn) == true) {
+  if (login_check($acc_conn) == true) {
     $logged = 'in';
 } else {
     $logged = 'out';

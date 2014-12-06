@@ -1,14 +1,17 @@
 <script type="text/javascript" src="js/location.js"></script>
-
+<script type="text/javascript">
+	document.getElementById("countrydiv").innerHTML = getCountry(); 
+</script>
 <div class='row'>
   <div id='query_container' class='col-sm-4 col-sm-offset-1 col-md-4 col-md-offset-1 sidebar' style='text-align:center'>
     <div class="input-group">
       <span class="input-group-addon">location</span>
       <input id='autocomplete' ng-model='address' type="text" class="form-control" placeholder="address">
     </div>
+	<br>
 	Account Settings
 
-	<form method="post" action="" name="form1"> 
+	<form method="post" action="updateacc.php" name="form1"> 
 		<center>
 			<table width="45%"  cellspacing="0" cellpadding="0">
 				<tr>
@@ -16,9 +19,6 @@
 				    <td width="50">:</td>
 					<td  width="150">
 						<div id="countrydiv">
-						    <select name="country" onClick="getCountry()">
-								<option>Select Country</option>
-						    </select>
 						</div>
 					</td>
 				</tr>
@@ -45,6 +45,7 @@
 					</td>
 				</tr>
 			</table>
+			<input type="submit" value="Submit">
 		</center>
 	</form>
 	

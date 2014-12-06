@@ -10,13 +10,13 @@ if (isset($_POST['username'], $_POST['p'])) {
 		$username = $_POST['username'];
 		$password = $_POST['p']; // The hashed password.
 	 
-		if (login($username, $password, $conn) == true) {
+		if (login($username, $password, $acc_conn) == true) {
 			// Login success 
 			header('Location: ../../googleAPI_demo/index.php');
 			exit();
 		} else {
 			// Login failed 
-			header('Location: ../index.php?error=1');
+			header('Location: ../../googleAPI_demo/index.php?error=1');
 		}
 	}
 	elseif (isset($_POST['r']))
@@ -32,7 +32,7 @@ if (isset($_POST['username'], $_POST['p'])) {
 
     // check existing username
     $prep_stmt = "SELECT id FROM members WHERE username = ? LIMIT 1";
-    $stmt = $conn->prepare($prep_stmt);
+    $stmt = $acc_conn->prepare($prep_stmt);
  
     if ($stmt) {
         $stmt->bind_param('s', $username);
@@ -64,7 +64,7 @@ if (isset($_POST['username'], $_POST['p'])) {
         $password = hash('sha512', $password . $random_salt);
  
         // Insert the new user into the database 
-        if ($insert_stmt = $conn->prepare("INSERT INTO members (username, password, salt) VALUES (?, ?, ?)")) {
+        if ($insert_stmt = $acc_conn->prepare("INSERT INTO members (username, password, salt) VALUES (?, ?, ?)")) {
             $insert_stmt->bind_param('sss', $username, $password, $random_salt);
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {

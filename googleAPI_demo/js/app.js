@@ -9,7 +9,7 @@ MX_DebugConsoleApp.config(['$routeProvider',
             templateUrl: 'partials/account_settings.html',
             controller: 'demo1Ctrl'
         }).otherwise({
-            redirectTo: '/blank'
+            redirectTo: '/demo1'
         });
     }
 ]);

@@ -3,7 +3,7 @@
 	$DBUser   = 'sec_user';
 	$DBPass   = 'q4FXknLH';
 	$DBName   = 'secure_login';
-	$conn = mysqli_connect($DBServer, $DBUser, $DBPass, $DBName);
+	$acc_conn = mysqli_connect($DBServer, $DBUser, $DBPass, $DBName);
 	// check connection
 	if (mysqli_connect_errno()) {
 		echo('Database connection failed: '  . mysqli_connect_error());

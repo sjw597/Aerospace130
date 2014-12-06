@@ -39,7 +39,7 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
             var request = window.ActiveXObject ?
                 new ActiveXObject('Microsoft.XMLHTTP') :
                 new XMLHttpRequest;
-	    
+
             request.onreadystatechange = function() {
                 if (request.readyState == 4) {
                     request.onreadystatechange = $scope.doNothing;
@@ -51,13 +51,11 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
             request.send(null);
         }
 
-/*
+
 	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
             for (var i = 0; i < markers.length; i++) {
-                console.log(markers[i].getAttribute("lat"));
-                console.log(markers[i].getAttribute("lon"));
                 var point = new google.maps.LatLng(
                     parseFloat(markers[i].getAttribute("lat")),
                     parseFloat(markers[i].getAttribute("lon")));
@@ -67,9 +65,19 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
                     icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
                 });
             }
+			var userlocation = xml.documentElement.getElementsByTagName("location");
+			if (userlocation != null){
+			console.log(userlocation[0].getAttribute("lat"));
+			console.log(userlocation[0].getAttribute("lon"));
+			var point = new google.maps.LatLng(
+                    parseFloat(userlocation[0].getAttribute("lat")),
+                    parseFloat(userlocation[0].getAttribute("lon")));
+			map.setCenter(point);
+			}
         });
-*/
 
+
+/*
 	$scope.downloadUrl("http://107.170.221.211/ta_workspace/Aerospace130/generate_mark_xml.php", function(data) {
 	    var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
@@ -107,6 +115,7 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
 		    console.log(path[i].getAttribute("time"));
 		}
 		*/
+		/*
 		var highInterest = false;
 		var currentPathCoordinates = []
 		for(var i = 0; i < path.length; i++) {
@@ -140,7 +149,8 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
                 });
             }
 	    */
-	});
+		/*
+	});*/
 
         $scope.doNothing = function() {}
 

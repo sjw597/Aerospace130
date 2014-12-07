@@ -45,7 +45,7 @@ function filter($mysqli, $param) {
     }
 
     $sql = $select . $where . ";";
-    echo $sql . '<br>';
+    //echo $sql . '<br>';
     if ($result = $mysqli->query($sql)) {
         while ($obj = $result->fetch_object())
             echo(json_encode($obj));

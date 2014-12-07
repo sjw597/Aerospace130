@@ -17,13 +17,18 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
         });
         var myLatlng = new google.maps.LatLng(-34.397, 150.644);
         var mapOptions = {
+	    minZoom: 2,
+	    maxZoom: 8,
             zoom: 8,
             center: myLatlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+	    mapTypeControl: false,
+	    streetViewControl: false,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
         };
         var map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
 
+	nite.init(map);
 	
 	$scope.downloadUrl= function(url,callback){
             var request = window.ActiveXObject ?

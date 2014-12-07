@@ -16,6 +16,7 @@ include_once '../accounts/includes/functions.php';
     <script type="text/javascript" src="js/lib/angular.min.js"></script>
     <script type="text/javascript" src="js/lib/angular-route.min.js"></script>
     <script type="text/javascript" src='js/app.js'></script>
+    <script type="text/javascript" src='js/nite-overlay/nite-overlay.js'></script>
     <script type="text/javascript" src='js/controllers.js'></script>
     <script type="text/javascript" src='js/printjson.js'></script>
 	<script type="text/JavaScript" src="../accounts/js/sha512.js"></script> 

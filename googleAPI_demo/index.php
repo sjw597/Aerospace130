@@ -53,7 +53,9 @@ include_once '../accounts/includes/functions.php';
 		<?php } ?>
 		
 		<div class="container-fluid" style="background-image: url(./img/banner.png); height: 100px; border: 1px solid #0082D5">
-		<div style="background-color:rgba(225, 225, 225, .7); margin-top:10px; height:80px; width:400px; padding:20px; border-radius:10px ">LOGO</div>	
+		<div style="background-color:rgba(225, 225, 225, 0); margin-top:10px; height:80px; width:400px; padding:10px; border-radius:10px ">
+			<img src=./img/logo.png style="width:250px;height:75px">
+		</div>	
 		<div class='navbar-header'> </div>
         <p class="navbar-text" style="color:black">{{prompt}}</p>
       </div>

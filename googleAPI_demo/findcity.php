@@ -8,6 +8,6 @@
 <select name="city">
 	<option>Select City</option>
 	<?php while($row=mysqli_fetch_array($result, MYSQLI_ASSOC)) { ?>
-		<option value=<?php echo $row['city_name']?>><?php echo $row['city_name']?></option>
+		<option value="<?php echo $row['city_name']?>"><?php echo $row['city_name']?></option>
 	<?php } ?>
 </select>

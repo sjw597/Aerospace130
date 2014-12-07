@@ -25,8 +25,7 @@
 		$newnode->setAttribute("lat", $user_coordinates['lattitude']);
         $newnode->setAttribute("lon", $user_coordinates['longitude']);
 	}
-	
-    // TODO: Add satellite name when it is added to DB.
+
     $sql = 'SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip GROUP BY NAME';
     $results = $conn->query($sql);
 
@@ -38,12 +37,7 @@
     header("Content-type: text/xml");
 
     $results->data_seek(0);
-	/*
-	$node = $dom->createElement("location");
-	$newnode = $parnode->appendChild($node);
-	$newnode->setAttribute("lat", '1');
-	$newnode->setAttribute("lon", '2');
-	*/
+
     while($row = $results->fetch_assoc()){
         // ADD TO XML DOCUMENT NODE
         $node = $dom->createElement("marker");

@@ -15,11 +15,11 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
         google.maps.event.addListener(autocomplete, 'place_changed', function() {
             $scope.changeMapCenter();
         });
-        var myLatlng = new google.maps.LatLng(-34.397, 150.644);
+        var myLatlng = new google.maps.LatLng(0,0);
         var mapOptions = {
 	    minZoom: 2,
 	    maxZoom: 8,
-            zoom: 8,
+            zoom: 2,
             center: myLatlng,
 	    mapTypeControl: false,
 	    streetViewControl: false,

@@ -24,16 +24,6 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
         var map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var geolocation = new google.maps.LatLng(
-                    position.coords.latitude, position.coords.longitude);
-                map.setCenter(geolocation);
-                autocomplete.setBounds(new google.maps.LatLngBounds(geolocation,
-                    geolocation));
-            });
-        }
-
 	
 	$scope.downloadUrl= function(url,callback){
             var request = window.ActiveXObject ?
@@ -55,24 +45,41 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
 	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
-            for (var i = 0; i < markers.length; i++) {
-                var point = new google.maps.LatLng(
-                    parseFloat(markers[i].getAttribute("lat")),
-                    parseFloat(markers[i].getAttribute("lon")));
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: point,
-                    icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
-                });
-            }
 			var userlocation = xml.documentElement.getElementsByTagName("location");
+            for (var i = 0; i < markers.length; i++) {
+				var point = new google.maps.LatLng(
+					parseFloat(markers[i].getAttribute("lat")),
+					parseFloat(markers[i].getAttribute("lon")));
+				var marker = new google.maps.Marker({
+					map: map,
+					position: point,
+					icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
+				});
+				var content = 'NAME: ' + markers[i].getAttribute("name") + 
+							'<br> NORAD ID: ' + markers[i].getAttribute("id") + 
+							'<br> LAT: ' + markers[i].getAttribute("lat") + 
+							'<br> LON: ' + markers[i].getAttribute("lon") +
+							'<br> DIRECTION: ' + markers[i].getAttribute("dir")
+							;
+				var name = markers[i].getAttribute("name");
+
+				var infowindow = new google.maps.InfoWindow()
+
+				google.maps.event.addListener(marker,'click', (function(marker,content,infowindow, name){
+					return function() {
+						infowindow.setContent(content);
+						infowindow.open(map,marker);
+						document.getElementById('wiki').src = "http://en.m.wikipedia.org/w/index.php?search=" + name;
+					};
+				})(marker,content,infowindow, name));  
+            }
 			if (userlocation != null){
-			console.log(userlocation[0].getAttribute("lat"));
-			console.log(userlocation[0].getAttribute("lon"));
-			var point = new google.maps.LatLng(
-                    parseFloat(userlocation[0].getAttribute("lat")),
-                    parseFloat(userlocation[0].getAttribute("lon")));
-			map.setCenter(point);
+				console.log(userlocation[0].getAttribute("lat"));
+				console.log(userlocation[0].getAttribute("lon"));
+				var point = new google.maps.LatLng(
+						parseFloat(userlocation[0].getAttribute("lat")),
+						parseFloat(userlocation[0].getAttribute("lon")));
+				map.setCenter(point);
 			}
         });
 

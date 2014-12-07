@@ -1,9 +1,12 @@
 <div class='row'>
   <div id='query_container' class='col-sm-4 col-sm-offset-1 col-md-4 col-md-offset-1 sidebar' style='text-align:center'>
     <div class="input-group">
-      <span class="input-group-addon">location</span>
+      <span class="input-group-addon">Recenter the Map</span>
       <input id='autocomplete' ng-model='address' type="text" class="form-control" placeholder="address">
     </div>
+	<br>
+	Press on a satellite marker on the right for more information!
+	<iframe id="wiki" src="http://wikipedia.org?printable=yes"></iframe>
   </div>
   <div id="sidebar-resizer" resizer="vertical" resizer-left="#query_container" resizer-right='#renderjson' class='col-sm-offset-5 col-md-offset-5 resizer'></div>
   <div id='renderjson' class='col-sm-7 col-sm-offset-5 col-md-7 col-md-offset-5 sidebar'>

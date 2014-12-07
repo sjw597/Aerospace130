@@ -27,7 +27,7 @@
 	}
 	
     // TODO: Add satellite name when it is added to DB.
-    $sql = 'SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), HIGH_INTEREST FROM tip GROUP BY NAME';
+    $sql = 'SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip GROUP BY NAME';
     $results = $conn->query($sql);
 
     if($results === false) {
@@ -48,11 +48,12 @@
         // ADD TO XML DOCUMENT NODE
         $node = $dom->createElement("marker");
         $newnode = $parnode->appendChild($node);
+		$newnode->setAttribute("name", $row['NAME']);
         $newnode->setAttribute("lat", $row['LAT']);
         $newnode->setAttribute("lon", $row['LON']);
 		$newnode->setAttribute("id", $row['NORAD_CAT_ID']);
-		$newnode->setAttribute("time", $row['MSG_EPOCH']);
-		$newnode->setAttribute("intr", $row['HIGH_INTEREST']);
+		$newnode->setAttribute("time", $row['INSERT_EPOCH']);
+		$newnode->setAttribute("dir", $row['DIRECTION']);
     }
     echo $dom->saveXML();
 ?>

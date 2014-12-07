@@ -1,5 +1,19 @@
 <?php
 
+function nearest_filter($mysqli, $param) {
+    $sql = "SELECT * FROM tip";
+    if ($result = $mysqli->query($sql)) {
+        while ($obj = $result->fetch_object()) {
+            $obj_array = get_object_vars($obj);
+            $dis = sqrt(pow($obj_array["LAT"]  - $param["LAT"], 2) + pow($obj_array["LON"]  - $param["LON"], 2));
+            if ($dis <= $param["DIS"])
+                echo(json_encode($obj));
+        }
+    }
+    else
+        echo "Error: " . $sql . "<br>" . $mysqli->error;
+}
+
 function filter($mysqli, $param) {
     $select = "SELECT * FROM tip";
     $where = " ";

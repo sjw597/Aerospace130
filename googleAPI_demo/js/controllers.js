@@ -235,7 +235,7 @@ consoleControllers.directive('resizer',
 );
 
 function scopeSetup(index) {
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i <= 1; i++) {
         document.getElementById('utilities_' + i).style.backgroundColor = (i == index ? '#cccccc' : '');
     }
 }
@@ -253,13 +253,14 @@ function addMarker(map, marker_xml) {
 	parseFloat(marker_xml.getAttribute("lat")),
 	parseFloat(marker_xml.getAttribute("lon")));
 
+    var name = marker_xml.getAttribute("name");
+
     var marker = new google.maps.Marker({
 	map: map,
 	position: location,
-	icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
+	icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
+	title: name
     });
-
-    var name = marker_xml.getAttribute("name");
 
     var content = 'NAME: ' + name + 
 	'<br> NORAD ID: ' + marker_xml.getAttribute("id") + 
@@ -274,7 +275,8 @@ function addMarker(map, marker_xml) {
 	return function() {
 	    infowindow.setContent(content);
 	    infowindow.open(map,marker);
-	    document.getElementById('wiki').src = "http://en.m.wikipedia.org/w/index.php?search=" + name;
+	    document.getElementById("points_location").innerHTML="";
+	    document.getElementById("wiki").innerHTML ="<iframe id='wiki' src='http://en.m.wikipedia.org/w/index.php?search=" +name+"'></iframe>";
 	};
     })(marker,content,infowindow, name));
 
@@ -295,6 +297,10 @@ function deleteMarkers(map) {
   out to the console.
 */
 function printPoints() {
-    for(var i=0;i<marker_arr.length;i++)
-	console.log(marker_arr[i].getPosition());
+    scopeSetup(1);
+    document.getElementById("wiki").innerHTML="";
+    for(var i=0;i<marker_arr.length;i++) {
+	document.getElementById("wiki").innerHTML = "";
+	document.getElementById("points_location").innerHTML +="<p>"+ marker_arr[i].getTitle()+" "+marker_arr[i].getPosition()+"<\p>";
+    }
 }

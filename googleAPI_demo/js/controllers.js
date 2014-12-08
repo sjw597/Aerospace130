@@ -30,7 +30,7 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
 
 	nite.init(map);
 	
-	$scope.downloadUrl= function(url,callback){
+	$scope.downloadUrl= function(url,poststring,callback){
             var request = window.ActiveXObject ?
                 new ActiveXObject('Microsoft.XMLHTTP') :
                 new XMLHttpRequest;
@@ -42,12 +42,12 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
                 }
             };
 	    
-            request.open('GET', url, true);
-            request.send(null);
+            request.open('POST', url, true);
+            request.send(poststring);
         }
 
 
-	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
+	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", null, function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
 			var userlocation = xml.documentElement.getElementsByTagName("location");
@@ -60,7 +60,7 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
 					position: point,
 					icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
 				});
-				var content = 'NAME: ' + markers[i].getAttribute("name") + 
+				var content = '<b>' + markers[i].getAttribute("name") + '</b>' + 
 							'<br> NORAD ID: ' + markers[i].getAttribute("id") + 
 							'<br> LAT: ' + markers[i].getAttribute("lat") + 
 							'<br> LON: ' + markers[i].getAttribute("lon") +

@@ -1,21 +1,39 @@
 <?php
+include_once 'db_connection.php';
 
 function nearest_filter($mysqli, $param) {
     $sql = "SELECT * FROM tip";
-    if ($result = $mysqli->query($sql)) {
-        while ($obj = $result->fetch_object()) {
-            $obj_array = get_object_vars($obj);
-            $dis = sqrt(pow($obj_array["LAT"]  - $param["LAT"], 2) + pow($obj_array["LON"]  - $param["LON"], 2));
-            if ($dis <= $param["DIS"])
-                echo(json_encode($obj));
-        }
+	$results = $mysqli->query($sql);
+    if($results === false) {
+      trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $mysqli->error, E_USER_ERROR);
     }
-    else
-        echo "Error: " . $sql . "<br>" . $mysqli->error;
+	// Start XML file, create parent node
+    $dom = new DOMDocument("1.0");
+	
+	$node = $dom->createElement("markers");
+    $parnode = $dom->appendChild($node);
+	
+	header("Content-type: text/xml");
+    while($row = $results->fetch_assoc()){
+            $dis = sqrt(pow($row['LAT']  - $param['LAT'], 2) + pow($row['LON']  - $param['LON'], 2));
+            if ($dis <= $param["DIS"]){
+				$node = $dom->createElement("marker");
+				$newnode = $parnode->appendChild($node);
+				$newnode->setAttribute("name", $row['NAME']);
+				$newnode->setAttribute("lat", $row['LAT']);
+				$newnode->setAttribute("lon", $row['LON']);
+				$newnode->setAttribute("id", $row['NORAD_CAT_ID']);
+				$newnode->setAttribute("time", $row['INSERT_EPOCH']);
+				$newnode->setAttribute("dir", $row['DIRECTION']);
+			}
+	}
+	echo $dom->saveXML();
 }
 
+
 function filter($mysqli, $param) {
-    $select = "SELECT * FROM tip";
+    
+	$select = "SELECT * FROM tip";
     $where = " ";
     $first_k = true;
     foreach ($param as $k => $v) {
@@ -46,10 +64,31 @@ function filter($mysqli, $param) {
 
     $sql = $select . $where . ";";
     //echo $sql . '<br>';
-    if ($result = $mysqli->query($sql)) {
-        while ($obj = $result->fetch_object())
-            echo(json_encode($obj));
+	
+	// Start XML file, create parent node
+    $dom = new DOMDocument("1.0");
+	
+	$node = $dom->createElement("markers");
+    $parnode = $dom->appendChild($node);
+    
+	$results = $mysqli->query($sql);
+    if($results === false) {
+      trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $mysqli->error, E_USER_ERROR);
     }
-    else
-        echo "Error: " . $sql . "<br>" . $mysqli->error;
+	// We want to print out XML for AJAX calls.
+    header("Content-type: text/xml");
+
+    $results->data_seek(0);
+    while($row = $results->fetch_assoc()){
+        // ADD TO XML DOCUMENT NODE
+        $node = $dom->createElement("marker");
+        $newnode = $parnode->appendChild($node);
+		$newnode->setAttribute("name", $row['NAME']);
+        $newnode->setAttribute("lat", $row['LAT']);
+        $newnode->setAttribute("lon", $row['LON']);
+		$newnode->setAttribute("id", $row['NORAD_CAT_ID']);
+		$newnode->setAttribute("time", $row['INSERT_EPOCH']);
+		$newnode->setAttribute("dir", $row['DIRECTION']);
+    }
+    echo $dom->saveXML();
 }

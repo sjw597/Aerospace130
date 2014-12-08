@@ -9,7 +9,7 @@
       <input id='autocomplete' ng-model='address' type="text" class="form-control" placeholder="address">
     </div>
 	<br>
-	Account Settings
+	<b>Account Settings</b>
 
 	<form method="post" action="updateacc.php" name="form1"> 
 		<center>
@@ -49,6 +49,39 @@
 		</center>
 	</form>
 	
+	<br>
+	<b>Filters</b>
+	<form method="post" action="updatefilters.php" name="form2">
+	<!--TODO: Name -->
+		<input type="radio" name="filtertype" value="range" checked>
+		<u>Filter by Coordinate Range</u>: <br>
+			Lattitude (between -90 and 90):
+				<br>
+				<input type="number" name="minLat" min="-90" max="90">
+				<input type="number" name="maxLat" min="-90" max="90">
+				<br>
+			Longitude (between -180 and 180)
+				<br>
+				<input type="number" name="minLon" min="-180" max="180">
+				<input type="number" name="maxLon" min="-180" max="180">
+				<br>
+			<br>
+		<input type="radio" name="filtertype" value="distance" checked>
+		<u> Radius from a point </u>: <br>
+			Lat/Lon [-90, 90], [-180, 180]:
+				<br>
+				<input type="number" name="maxLat" min="-90" max="90">
+				<input type="number" name="maxLon" min="-180" max="180">
+				<br>
+			Radius
+				<br>
+				<input type="number" name="radius" min="-180" max="180">
+				<br>
+			<br>
+		<input type="radio" name="filtertype" value="none" checked> No Filters
+		<br>
+			<input type="submit" value="Submit">
+	</form>
   </div>
   <div id="sidebar-resizer" resizer="vertical" resizer-left="#query_container" resizer-right='#renderjson' class='col-sm-offset-5 col-md-offset-5 resizer'></div>
   <div id='renderjson' class='col-sm-7 col-sm-offset-5 col-md-7 col-md-offset-5 sidebar'>

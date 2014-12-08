@@ -50,42 +50,22 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
 	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
-			var userlocation = xml.documentElement.getElementsByTagName("location");
+	    var userlocation = xml.documentElement.getElementsByTagName("location");
             for (var i = 0; i < markers.length; i++) {
-				var point = new google.maps.LatLng(
-					parseFloat(markers[i].getAttribute("lat")),
-					parseFloat(markers[i].getAttribute("lon")));
-				var marker = new google.maps.Marker({
-					map: map,
-					position: point,
-					icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
-				});
-				var content = 'NAME: ' + markers[i].getAttribute("name") + 
-							'<br> NORAD ID: ' + markers[i].getAttribute("id") + 
-							'<br> LAT: ' + markers[i].getAttribute("lat") + 
-							'<br> LON: ' + markers[i].getAttribute("lon") +
-							'<br> DIRECTION: ' + markers[i].getAttribute("dir")
-							;
-				var name = markers[i].getAttribute("name");
-
-				var infowindow = new google.maps.InfoWindow()
-
-				google.maps.event.addListener(marker,'click', (function(marker,content,infowindow, name){
-					return function() {
-						infowindow.setContent(content);
-						infowindow.open(map,marker);
-						document.getElementById('wiki').src = "http://en.m.wikipedia.org/w/index.php?search=" + name;
-					};
-				})(marker,content,infowindow, name));  
+		addMarker(map,markers[i]);
             }
-			if (userlocation != null){
-				console.log(userlocation[0].getAttribute("lat"));
-				console.log(userlocation[0].getAttribute("lon"));
-				var point = new google.maps.LatLng(
-						parseFloat(userlocation[0].getAttribute("lat")),
-						parseFloat(userlocation[0].getAttribute("lon")));
-				map.setCenter(point);
-			}
+
+	    //TODO: this isn't working. 
+	    /*
+	    if (userlocation != null){
+		console.log(userlocation[0].getAttribute("lat"));
+		console.log(userlocation[0].getAttribute("lon"));
+		var point = new google.maps.LatLng(
+		    parseFloat(userlocation[0].getAttribute("lat")),
+		    parseFloat(userlocation[0].getAttribute("lon")));
+		map.setCenter(point);
+	    }
+	    */
         });
 
 
@@ -258,4 +238,63 @@ function scopeSetup(index) {
     for (var i = 0; i < 1; i++) {
         document.getElementById('utilities_' + i).style.backgroundColor = (i == index ? '#cccccc' : '');
     }
+}
+
+
+/*
+  A global array of marker points. We need this in case we want to remove points
+  with filters, or iterate through them for export. From now on, use the following
+  functions to add or remove points to the map.
+*/
+var marker_arr = [];
+
+function addMarker(map, marker_xml) {
+    var location = new google.maps.LatLng(
+	parseFloat(marker_xml.getAttribute("lat")),
+	parseFloat(marker_xml.getAttribute("lon")));
+
+    var marker = new google.maps.Marker({
+	map: map,
+	position: location,
+	icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
+    });
+
+    var name = marker_xml.getAttribute("name");
+
+    var content = 'NAME: ' + name + 
+	'<br> NORAD ID: ' + marker_xml.getAttribute("id") + 
+	'<br> LAT: ' + marker_xml.getAttribute("lat") + 
+	'<br> LON: ' + marker_xml.getAttribute("lon") +
+	'<br> DIRECTION: ' + marker_xml.getAttribute("dir")
+    ;
+    
+    var infowindow = new google.maps.InfoWindow()
+    
+    google.maps.event.addListener(marker,'click', (function(marker,content,infowindow, name){
+	return function() {
+	    infowindow.setContent(content);
+	    infowindow.open(map,marker);
+	    document.getElementById('wiki').src = "http://en.m.wikipedia.org/w/index.php?search=" + name;
+	};
+    })(marker,content,infowindow, name));
+
+    //add the point to the gloabal array
+    marker_arr.push(marker);
+}
+
+function deleteMarkers(map) {
+    for(var i=0;i<marker_arr.length;i++)
+	marker_arr[i].setMap(null);
+    marker_arr=[];
+}
+
+
+/*
+  TODO: generate a file for output. For now,
+  just print the points that have been displayed
+  out to the console.
+*/
+function printPoints() {
+    for(var i=0;i<marker_arr.length;i++)
+	console.log(marker_arr[i].getPosition());
 }

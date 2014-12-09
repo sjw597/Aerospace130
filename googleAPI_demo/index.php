@@ -63,7 +63,7 @@ include_once '../accounts/includes/functions.php';
     <div class="container-fluid">
       <div class='col-sm-1 col-md-1 sidebar'>
         <ul class='nav nav-sidebar'>
-          <li><a id='utilities_0' style='' href="#/demo1">Search</a></li>
+          <li><a id='utilities_0' style='' href="javascript:void(0)" onclick="clearScreen();">Search & Filter</a></li>
           <li><a id='utilities_1' style='' href="javascript:void(0)" onclick="printPoints();">Export Points</a></li>
 		  <?php if ($logged == 'in'){ ?>
 		  <li><a style='' href="#/account_settings">Account settings</a></li>

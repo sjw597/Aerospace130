@@ -2,6 +2,9 @@ var consoleControllers = angular.module('consoleControllers', []);
 consoleControllers.controller('mainpanelCtrl', ['$scope',
     function($scope) {}
 ]);
+
+var map_global;
+
 consoleControllers.controller('demo1Ctrl', ['$scope',
     function($scope) {
         scopeSetup(0);
@@ -27,6 +30,8 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
         };
         var map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
+
+	map_global=map;
 
 	nite.init(map);
 	
@@ -303,4 +308,88 @@ function printPoints() {
 	document.getElementById("wiki").innerHTML = "";
 	document.getElementById("points_location").innerHTML +="<p>"+ marker_arr[i].getTitle()+" "+marker_arr[i].getPosition()+"<\p>";
     }
+}
+
+
+function filter_aux() {
+
+    var object=	{
+
+    };
+
+    var filter_types=document.getElementsByName('filtertype');
+    var minLat=document.getElementsByName('minLat');
+    var maxLat=document.getElementsByName('maxLat');
+    var minLon=document.getElementsByName('minLon');
+    var maxLon=document.getElementsByName('maxLon');
+    var radius=document.getElementsByName('radius');
+
+    var i=0;
+    while(i<3) {
+	if(filter_types[i].checked)
+	    break;
+	i++;
+    }
+
+    switch(i) {
+    case 0:
+	filterRequest(
+	    {
+		type: "2",
+		LON: {"0":minLon[0].value+" "+maxLon[0].value,},
+		LAT: {"0":minLat[0].value+" "+maxLat[0].value,}
+	    }
+	);
+	break;
+    case 1:
+	filterRequest(
+	    {
+		type : "1",
+		LON : maxLon[1].value,
+		LAT : maxLat[1].value,
+		DIS : radius[0].value
+	    }
+	);
+	break;
+    case 2:
+	filterRequest(
+	    {
+		type: "2",
+		LON: {"0":"-180 180"},
+		LAT: {"0":"-90 90"}
+	    }
+	);
+    }
+}
+
+/*
+  The filterRequest function jakes a JS object using the AND/OR filter method
+  designed by Sunny. It will apply that filter to the map.
+*/
+function filterRequest(object) {
+var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "http://107.170.221.211/ct_workspace/Aerospace130/php_filter/data.php"); //TODO: don't hard code this URL. for some reason php wasn't working when I worked out of my home directory on the server
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4) {
+            var xml=xmlhttp.responseXML;
+	    deleteMarkers(map_global);
+	    var markers = xml.documentElement.getElementsByTagName("marker");
+	    for (var i = 0; i < markers.length; i++) {
+		addMarker(map_global,markers[i]);
+	    }
+        }
+    };
+
+    xmlhttp.send(JSON.stringify(object));
+}
+
+
+/*
+  Clear all the printed points and wikipedia from screen.
+*/
+function clearScreen() {
+	    document.getElementById("points_location").innerHTML="";
+	    document.getElementById("wiki").innerHTML ="<p>Press on a satellite marker on the right for more information!</p>";
 }

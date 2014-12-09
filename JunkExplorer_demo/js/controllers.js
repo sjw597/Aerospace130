@@ -351,7 +351,7 @@ function filter_aux() {
 	filterRequest(
 	    {
 		type: "2",
-		LON: {"0":"-180 180"},
+		LON: {"0":"0 360"},
 		LAT: {"0":"-90 90"}
 	    }
 	);

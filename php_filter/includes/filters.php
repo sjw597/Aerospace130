@@ -33,7 +33,8 @@ function nearest_filter($mysqli, $param) {
 
 function filter($mysqli, $param) {
     
-	$select = "SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip";
+	$select = "SELECT A.ID_KEY, NAME, LAT, LON, NORAD_CAT_ID, INSERT_EPOCH, DIRECTION FROM tip A 
+				INNER JOIN (SELECT ID_KEY, max(INSERT_EPOCH) FROM tip GROUP BY NAME) B ON A.ID_KEY = B.ID_KEY";
     $where = " ";
     $first_k = true;
     foreach ($param as $k => $v) {
@@ -62,7 +63,7 @@ function filter($mysqli, $param) {
         $where .= ") ";
     }
 
-    $sql = $select . $where . "GROUP BY NAME" . ";";
+    $sql = $select . $where . ";";
     //echo $sql . '<br>';
 	
 	// Start XML file, create parent node

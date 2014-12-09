@@ -2,7 +2,7 @@
 include_once 'db_connection.php';
 
 function nearest_filter($mysqli, $param) {
-    $sql = "SELECT * FROM tip";
+    $sql = "SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip GROUP BY NAME";
 	$results = $mysqli->query($sql);
     if($results === false) {
       trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $mysqli->error, E_USER_ERROR);
@@ -33,7 +33,7 @@ function nearest_filter($mysqli, $param) {
 
 function filter($mysqli, $param) {
     
-	$select = "SELECT * FROM tip";
+	$select = "SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip";
     $where = " ";
     $first_k = true;
     foreach ($param as $k => $v) {
@@ -62,7 +62,7 @@ function filter($mysqli, $param) {
         $where .= ") ";
     }
 
-    $sql = $select . $where . ";";
+    $sql = $select . $where . "GROUP BY NAME" . ";";
     //echo $sql . '<br>';
 	
 	// Start XML file, create parent node

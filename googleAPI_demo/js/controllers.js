@@ -57,7 +57,7 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
             var markers = xml.documentElement.getElementsByTagName("marker");
 	    var userlocation = xml.documentElement.getElementsByTagName("location");
             for (var i = 0; i < markers.length; i++) {
-		addMarker(map,markers[i]);
+		addMarker(markers[i]);
             }
 
 	    //TODO: this isn't working. 
@@ -253,7 +253,7 @@ function scopeSetup(index) {
 */
 var marker_arr = [];
 
-function addMarker(map, marker_xml) {
+function addMarker(marker_xml) {
     var location = new google.maps.LatLng(
 	parseFloat(marker_xml.getAttribute("lat")),
 	parseFloat(marker_xml.getAttribute("lon")));
@@ -261,7 +261,7 @@ function addMarker(map, marker_xml) {
     var name = marker_xml.getAttribute("name");
 
     var marker = new google.maps.Marker({
-	map: map,
+	map: map_global,
 	position: location,
 	icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
 	title: name
@@ -279,7 +279,7 @@ function addMarker(map, marker_xml) {
     google.maps.event.addListener(marker,'click', (function(marker,content,infowindow, name){
 	return function() {
 	    infowindow.setContent(content);
-	    infowindow.open(map,marker);
+	    infowindow.open(map_global,marker);
 	    document.getElementById("points_location").innerHTML="";
 	    document.getElementById("wiki").innerHTML ="<iframe id='wiki' src='http://en.m.wikipedia.org/w/index.php?search=" +name+"'></iframe>";
 	};
@@ -289,7 +289,7 @@ function addMarker(map, marker_xml) {
     marker_arr.push(marker);
 }
 
-function deleteMarkers(map) {
+function deleteMarkers() {
     for(var i=0;i<marker_arr.length;i++)
 	marker_arr[i].setMap(null);
     marker_arr=[];
@@ -312,10 +312,6 @@ function printPoints() {
 
 
 function filter_aux() {
-
-    var object=	{
-
-    };
 
     var filter_types=document.getElementsByName('filtertype');
     var minLat=document.getElementsByName('minLat');
@@ -374,10 +370,10 @@ var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4) {
             var xml=xmlhttp.responseXML;
-	    deleteMarkers(map_global);
+	    deleteMarkers();
 	    var markers = xml.documentElement.getElementsByTagName("marker");
 	    for (var i = 0; i < markers.length; i++) {
-		addMarker(map_global,markers[i]);
+		addMarker(markers[i]);
 	    }
         }
     };

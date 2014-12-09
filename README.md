@@ -10,8 +10,8 @@ Need people to work on a graphical presentation of the information.
 
 Current working models can be found here:
 
-http://107.170.221.211/ct_workspace/Aerospace130/googleAPI_demo/index.php#/demo1 (will be altered a lot since it's a working branch)
-http://107.170.221.211/master/Aerospace130/googleAPI_demo/index.php (this is stable MASTER, please update this if you update MASTER)
+http://107.170.221.211/ct_workspace/Aerospace130/JunkExplorer_demo/index.php#/demo1 (will be altered a lot since it's a working branch)
+http://107.170.221.211/master/Aerospace130/JunkExplorer_demo/index.php (this is stable MASTER, please update this if you update MASTER)
 
 ##Mobile
 Doesn't look good on mobile at the moment, need someone to work on this too.

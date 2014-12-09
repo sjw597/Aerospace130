@@ -20,22 +20,22 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
         });
         var myLatlng = new google.maps.LatLng(0,0);
         var mapOptions = {
-	    minZoom: 2,
-	    maxZoom: 8,
+        minZoom: 2,
+        maxZoom: 8,
             zoom: 2,
             center: myLatlng,
-	    mapTypeControl: false,
-	    streetViewControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
             mapTypeId: google.maps.MapTypeId.SATELLITE
         };
         var map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
 
-	map_global=map;
+    map_global=map;
 
-	nite.init(map);
-	
-	$scope.downloadUrl= function(url,callback){
+    nite.init(map);
+    
+    $scope.downloadUrl= function(url,callback){
             var request = window.ActiveXObject ?
                 new ActiveXObject('Microsoft.XMLHTTP') :
                 new XMLHttpRequest;
@@ -46,105 +46,105 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
                     callback(request, request.status);
                 }
             };
-	    
+        
             request.open('GET', url, true);
             request.send(null);
         }
 
 
-	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
+    $scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
-			var userlocation = xml.documentElement.getElementsByTagName("location");
+            var userlocation = xml.documentElement.getElementsByTagName("location");
             for (var i = 0; i < markers.length; i++) {
-				addMarker(markers[i]);
+                addMarker(markers[i]);
             }
 
-	    if (userlocation != null){
-			console.log(userlocation[0].getAttribute("lat"));
-			console.log(userlocation[0].getAttribute("lon"));
-			var point = new google.maps.LatLng(
-				parseFloat(userlocation[0].getAttribute("lat")),
-				parseFloat(userlocation[0].getAttribute("lon")));
-			map.setCenter(point);
-				var marker = new google.maps.Marker({
-					map: map,
-					position: point,
-					icon: 'http://labs.google.com/ridefinder/images/mm_20_red.png'
-				});
-			var contentString = '<b> City: ' + userlocation[0].getAttribute("city") + '</b>' +
-								'<br> LAT: ' + userlocation[0].getAttribute("lat") + 
-								'<br> LON: ' + userlocation[0].getAttribute("lon");
-			var infowindow = new google.maps.InfoWindow({
-				content: contentString
-			});
-			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.open(map,marker);
-			});
+        if (userlocation != null){
+            console.log(userlocation[0].getAttribute("lat"));
+            console.log(userlocation[0].getAttribute("lon"));
+            var point = new google.maps.LatLng(
+                parseFloat(userlocation[0].getAttribute("lat")),
+                parseFloat(userlocation[0].getAttribute("lon")));
+            map.setCenter(point);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: point,
+                    icon: 'http://labs.google.com/ridefinder/images/mm_20_red.png'
+                });
+            var contentString = '<b> City: ' + userlocation[0].getAttribute("city") + '</b>' +
+                                '<br> LAT: ' + userlocation[0].getAttribute("lat") + 
+                                '<br> LON: ' + userlocation[0].getAttribute("lon");
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map,marker);
+            });
 
-		}
+        }
     });
 
 
 /*
-	$scope.downloadUrl("http://107.170.221.211/ta_workspace/Aerospace130/generate_mark_xml.php", function(data) {
-	    var xml = data.responseXML;
+    $scope.downloadUrl("http://107.170.221.211/ta_workspace/Aerospace130/generate_mark_xml.php", function(data) {
+        var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
-	    //var MultiMap = require("collections/multi-map");
-	    var objToPath = {};
+        //var MultiMap = require("collections/multi-map");
+        var objToPath = {};
             for (var i = 0; i < markers.length; i++) {
-		//console.log(i);
-		var objID = markers[i].getAttribute("id");
-		//console.log(objID);
-		if(objID in objToPath) {
-		    //add the marker to the end of the existing array
-		    //console.log("in path");
-		    var arr = objToPath[objID];
-		    arr[arr.length] = markers[i];
-		} else {
-		    //make a new array with the marker in it, and put in objToPath
-		    //console.log("not in path");
-		    var arr = new Array(markers[i]);
-		    objToPath[objID] = arr;
-		}
+        //console.log(i);
+        var objID = markers[i].getAttribute("id");
+        //console.log(objID);
+        if(objID in objToPath) {
+            //add the marker to the end of the existing array
+            //console.log("in path");
+            var arr = objToPath[objID];
+            arr[arr.length] = markers[i];
+        } else {
+            //make a new array with the marker in it, and put in objToPath
+            //console.log("not in path");
+            var arr = new Array(markers[i]);
+            objToPath[objID] = arr;
+        }
             }
-	    //now objToPath is filled
-	    //sort each array in objToPath by time and draw the path on the map
-	    for(var pathID in objToPath) {
-		//console.log(pathID);
-		//console.log(objToPath[pathID].length);
-		if(pathID > 11000 || pathID < 10000) //in this example, only plot a few objects
-		    continue;
-		var path = objToPath[pathID];
-		path.sort(function(a,b) {
-		   return a.getAttribute("time").localeCompare(b.getAttribute("time")); 
-		});
-		/*
-		for(var i = 0; i < path.length; i++) {
-		    console.log(path[i].getAttribute("time"));
-		}
-		*/
-		/*
-		var highInterest = false;
-		var currentPathCoordinates = []
-		for(var i = 0; i < path.length; i++) {
-		    if(path[i].getAttribute("intr").toLowerCase() == "y")
-			highInterest = true;
-		    currentPathCoordinates[currentPathCoordinates.length] = 
-			new google.maps.LatLng(parseFloat(path[i].getAttribute("lat")),
-					       parseFloat(path[i].getAttribute("lon")));
-		}
-		var currentPath = new google.maps.Polyline({
-		    path: currentPathCoordinates,
-		    geodesic: true,
-		    strokeColor: '#'+Math.floor(Math.random()*16777215).toString(16), //random color
-		    strokeOpacity: 1.0,
-		    strokeWeight: highInterest ? 4 : 2
-		});
-		currentPath.setMap(map);
-	    }
-	    //removed the marker thing for this
-	    /*
+        //now objToPath is filled
+        //sort each array in objToPath by time and draw the path on the map
+        for(var pathID in objToPath) {
+        //console.log(pathID);
+        //console.log(objToPath[pathID].length);
+        if(pathID > 11000 || pathID < 10000) //in this example, only plot a few objects
+            continue;
+        var path = objToPath[pathID];
+        path.sort(function(a,b) {
+           return a.getAttribute("time").localeCompare(b.getAttribute("time")); 
+        });
+        /*
+        for(var i = 0; i < path.length; i++) {
+            console.log(path[i].getAttribute("time"));
+        }
+        */
+        /*
+        var highInterest = false;
+        var currentPathCoordinates = []
+        for(var i = 0; i < path.length; i++) {
+            if(path[i].getAttribute("intr").toLowerCase() == "y")
+            highInterest = true;
+            currentPathCoordinates[currentPathCoordinates.length] = 
+            new google.maps.LatLng(parseFloat(path[i].getAttribute("lat")),
+                           parseFloat(path[i].getAttribute("lon")));
+        }
+        var currentPath = new google.maps.Polyline({
+            path: currentPathCoordinates,
+            geodesic: true,
+            strokeColor: '#'+Math.floor(Math.random()*16777215).toString(16), //random color
+            strokeOpacity: 1.0,
+            strokeWeight: highInterest ? 4 : 2
+        });
+        currentPath.setMap(map);
+        }
+        //removed the marker thing for this
+        /*
             for (var i = 0; i < markers.length; i++) {
                 //console.log(markers[i].getAttribute("lat"));
                 //console.log(markers[i].getAttribute("lon"));
@@ -157,9 +157,9 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
                     icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png'
                 });
             }
-	    */
-		/*
-	});*/
+        */
+        /*
+    });*/
 
         $scope.doNothing = function() {}
 
@@ -267,34 +267,34 @@ var marker_arr = [];
 
 function addMarker(marker_xml) {
     var location = new google.maps.LatLng(
-	parseFloat(marker_xml.getAttribute("lat")),
-	parseFloat(marker_xml.getAttribute("lon")));
+    parseFloat(marker_xml.getAttribute("lat")),
+    parseFloat(marker_xml.getAttribute("lon")));
 
     var name = marker_xml.getAttribute("name");
 
     var marker = new google.maps.Marker({
-	map: map_global,
-	position: location,
-	icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
-	title: name
+    map: map_global,
+    position: location,
+    icon: 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
+    title: name
     });
 
     var content = '<b>' + name + '</b>' + 
-	'<br> NORAD ID: ' + marker_xml.getAttribute("id") + 
-	'<br> LAT: ' + marker_xml.getAttribute("lat") + 
-	'<br> LON: ' + marker_xml.getAttribute("lon") +
-	'<br> DIRECTION: ' + marker_xml.getAttribute("dir")
+    '<br> NORAD ID: ' + marker_xml.getAttribute("id") + 
+    '<br> LAT: ' + marker_xml.getAttribute("lat") + 
+    '<br> LON: ' + marker_xml.getAttribute("lon") +
+    '<br> DIRECTION: ' + marker_xml.getAttribute("dir")
     ;
     
     var infowindow = new google.maps.InfoWindow()
     
     google.maps.event.addListener(marker,'click', (function(marker,content,infowindow, name){
-	return function() {
-	    infowindow.setContent(content);
-	    infowindow.open(map_global,marker);
-	    document.getElementById("points_location").innerHTML="";
-	    document.getElementById("wiki").innerHTML ="<iframe id='wiki' src='http://en.m.wikipedia.org/w/index.php?search=" +name+"'></iframe>";
-	};
+    return function() {
+        infowindow.setContent(content);
+        infowindow.open(map_global,marker);
+        document.getElementById("points_location").innerHTML="";
+        document.getElementById("wiki").innerHTML ="<iframe id='wiki' src='http://en.m.wikipedia.org/w/index.php?search=" +name+"'></iframe>";
+    };
     })(marker,content,infowindow, name));
 
     //add the point to the gloabal array
@@ -303,7 +303,7 @@ function addMarker(marker_xml) {
 
 function deleteMarkers() {
     for(var i=0;i<marker_arr.length;i++)
-	marker_arr[i].setMap(null);
+    marker_arr[i].setMap(null);
     marker_arr=[];
 }
 
@@ -317,8 +317,8 @@ function printPoints() {
     scopeSetup(1);
     document.getElementById("wiki").innerHTML="";
     for(var i=0;i<marker_arr.length;i++) {
-		document.getElementById("wiki").innerHTML = "";
-		document.getElementById("points_location").innerHTML +="<p>"+ marker_arr[i].getTitle()+" "+marker_arr[i].getPosition()+"<\p>";
+        document.getElementById("wiki").innerHTML = "";
+        document.getElementById("points_location").innerHTML +="<p>"+ marker_arr[i].getTitle()+" "+marker_arr[i].getPosition()+"<\p>";
     }
 }
 
@@ -334,39 +334,39 @@ function filter_aux() {
 
     var i=0;
     while(i<3) {
-	if(filter_types[i].checked)
-	    break;
-	i++;
+    if(filter_types[i].checked)
+        break;
+    i++;
     }
 
     switch(i) {
     case 0:
-	filterRequest(
-	    {
-		type: "2",
-		LON: {"0":minLon[0].value+" "+maxLon[0].value,},
-		LAT: {"0":minLat[0].value+" "+maxLat[0].value,}
-	    }
-	);
-	break;
+    filterRequest(
+        {
+        type: "2",
+        LON: {"0":minLon[0].value+" "+maxLon[0].value,},
+        LAT: {"0":minLat[0].value+" "+maxLat[0].value,}
+        }
+    );
+    break;
     case 1:
-	filterRequest(
-	    {
-		type : "1",
-		LON : maxLon[1].value,
-		LAT : maxLat[1].value,
-		DIS : radius[0].value
-	    }
-	);
-	break;
+    filterRequest(
+        {
+        type : "1",
+        LON : maxLon[1].value,
+        LAT : maxLat[1].value,
+        DIS : radius[0].value
+        }
+    );
+    break;
     case 2:
-	filterRequest(
-	    {
-		type: "2",
-		LON: {"0":"0 360"},
-		LAT: {"0":"-90 90"}
-	    }
-	);
+    filterRequest(
+        {
+        type: "2",
+        LON: {"0":"0 360"},
+        LAT: {"0":"-90 90"}
+        }
+    );
     }
 }
 
@@ -382,11 +382,11 @@ var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4) {
             var xml=xmlhttp.responseXML;
-			deleteMarkers();
-			var markers = xml.documentElement.getElementsByTagName("marker");
-			for (var i = 0; i < markers.length; i++) {
-				addMarker(markers[i]);
-			}
+            deleteMarkers();
+            var markers = xml.documentElement.getElementsByTagName("marker");
+            for (var i = 0; i < markers.length; i++) {
+                addMarker(markers[i]);
+            }
         }
     };
 
@@ -398,6 +398,6 @@ var xmlhttp = new XMLHttpRequest();
   Clear all the printed points and wikipedia from screen.
 */
 function clearScreen() {
-	    document.getElementById("points_location").innerHTML="";
-	    document.getElementById("wiki").innerHTML ="<p>Press on a satellite marker on the right for more information!</p>";
+        document.getElementById("points_location").innerHTML="";
+        document.getElementById("wiki").innerHTML ="<p>Press on a satellite marker on the right for more information!</p>";
 }

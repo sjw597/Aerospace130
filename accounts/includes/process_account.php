@@ -12,11 +12,11 @@ if (isset($_POST['username'], $_POST['p'])) {
 	 
 		if (login($username, $password, $acc_conn) == true) {
 			// Login success 
-			header('Location: ../../googleAPI_demo/index.php');
+			header('Location: ../../JunkExplorer_demo/index.php');
 			exit();
 		} else {
 			// Login failed 
-			header('Location: ../../googleAPI_demo/index.php?error=1');
+			header('Location: ../../JunkExplorer_demo/index.php?error=1');
 		}
 	}
 	elseif (isset($_POST['r']))

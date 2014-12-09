@@ -18,4 +18,4 @@ setcookie(session_name(),
  
 // Destroy session 
 session_destroy();
-header('Location: ../googleAPI_demo/index.php');
+header('Location: ../JunkExplorer_demo/index.php');

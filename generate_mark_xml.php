@@ -16,7 +16,7 @@
 	    $node = $dom->createElement("location");
 		$newnode = $parnode->appendChild($node);
 		$uid = $_SESSION['user_id'];
-		$sql = 'SELECT distinct lattitude, longitude FROM memberloc, city 
+		$sql = 'SELECT distinct lattitude, longitude, city.city_name FROM memberloc, city 
 				WHERE memberloc.regionid = city.region_id AND
 					memberloc.city = city.city_name AND
 					memberloc.id = ' . $uid;
@@ -24,6 +24,7 @@
 		$user_coordinates = $results->fetch_assoc();
 		$newnode->setAttribute("lat", $user_coordinates['lattitude']);
         $newnode->setAttribute("lon", $user_coordinates['longitude']);
+		$newnode->setAttribute("city", $user_coordinates['city_name']);
 	}
 
     $sql = 'SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip GROUP BY NAME';

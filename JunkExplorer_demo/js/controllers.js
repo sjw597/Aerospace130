@@ -55,23 +55,35 @@ consoleControllers.controller('demo1Ctrl', ['$scope',
 	$scope.downloadUrl("http://107.170.221.211/ct_workspace/Aerospace130/generate_mark_xml.php", function(data) {
             var xml = data.responseXML;
             var markers = xml.documentElement.getElementsByTagName("marker");
-	    var userlocation = xml.documentElement.getElementsByTagName("location");
+			var userlocation = xml.documentElement.getElementsByTagName("location");
             for (var i = 0; i < markers.length; i++) {
-		addMarker(markers[i]);
+				addMarker(markers[i]);
             }
 
-	    //TODO: this isn't working. 
-	    /*
 	    if (userlocation != null){
-		console.log(userlocation[0].getAttribute("lat"));
-		console.log(userlocation[0].getAttribute("lon"));
-		var point = new google.maps.LatLng(
-		    parseFloat(userlocation[0].getAttribute("lat")),
-		    parseFloat(userlocation[0].getAttribute("lon")));
-		map.setCenter(point);
-	    }
-	    */
-        });
+			console.log(userlocation[0].getAttribute("lat"));
+			console.log(userlocation[0].getAttribute("lon"));
+			var point = new google.maps.LatLng(
+				parseFloat(userlocation[0].getAttribute("lat")),
+				parseFloat(userlocation[0].getAttribute("lon")));
+			map.setCenter(point);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: point,
+					icon: 'http://labs.google.com/ridefinder/images/mm_20_red.png'
+				});
+			var contentString = '<b> City: ' + userlocation[0].getAttribute("city") + '</b>' +
+								'<br> LAT: ' + userlocation[0].getAttribute("lat") + 
+								'<br> LON: ' + userlocation[0].getAttribute("lon");
+			var infowindow = new google.maps.InfoWindow({
+				content: contentString
+			});
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.open(map,marker);
+			});
+
+		}
+    });
 
 
 /*
@@ -267,7 +279,7 @@ function addMarker(marker_xml) {
 	title: name
     });
 
-    var content = 'NAME: ' + name + 
+    var content = '<b>' + name + '</b>' + 
 	'<br> NORAD ID: ' + marker_xml.getAttribute("id") + 
 	'<br> LAT: ' + marker_xml.getAttribute("lat") + 
 	'<br> LON: ' + marker_xml.getAttribute("lon") +
@@ -305,8 +317,8 @@ function printPoints() {
     scopeSetup(1);
     document.getElementById("wiki").innerHTML="";
     for(var i=0;i<marker_arr.length;i++) {
-	document.getElementById("wiki").innerHTML = "";
-	document.getElementById("points_location").innerHTML +="<p>"+ marker_arr[i].getTitle()+" "+marker_arr[i].getPosition()+"<\p>";
+		document.getElementById("wiki").innerHTML = "";
+		document.getElementById("points_location").innerHTML +="<p>"+ marker_arr[i].getTitle()+" "+marker_arr[i].getPosition()+"<\p>";
     }
 }
 
@@ -364,17 +376,17 @@ function filter_aux() {
 */
 function filterRequest(object) {
 var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", "http://107.170.221.211/ct_workspace/Aerospace130/php_filter/data.php"); //TODO: don't hard code this URL. for some reason php wasn't working when I worked out of my home directory on the server
+    xmlhttp.open("POST", "../php_filter/data.php");
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4) {
             var xml=xmlhttp.responseXML;
-	    deleteMarkers();
-	    var markers = xml.documentElement.getElementsByTagName("marker");
-	    for (var i = 0; i < markers.length; i++) {
-		addMarker(markers[i]);
-	    }
+			deleteMarkers();
+			var markers = xml.documentElement.getElementsByTagName("marker");
+			for (var i = 0; i < markers.length; i++) {
+				addMarker(markers[i]);
+			}
         }
     };
 

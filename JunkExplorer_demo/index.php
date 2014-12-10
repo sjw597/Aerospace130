@@ -6,6 +6,7 @@ include_once '../accounts/includes/functions.php';
 
 <html ng-app="MX_DebugConsoleApp">
   <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Demo</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
@@ -33,7 +34,7 @@ include_once '../accounts/includes/functions.php';
     $logged = 'out';
 }?>
   
-    <div class = 'navbar navbar-default navbar-fixed-top' role='navigation'>
+    <div class = 'navbar navbar-default navbar-static-top col-sm-12 col-md-12' role='navigation'>
 	
 		<?php if ($logged == 'out'){ ?>
 		<form class="navbar-form navbar-right" role="search" action="../accounts/includes/process_account.php" method="post">

@@ -331,16 +331,25 @@ function filter_aux() {
     var minLon=document.getElementsByName('minLon');
     var maxLon=document.getElementsByName('maxLon');
     var radius=document.getElementsByName('radius');
+	var name=document.getElementsByName('name');
 
     var i=0;
-    while(i<3) {
+    while(i<4) {
     if(filter_types[i].checked)
         break;
     i++;
     }
 
     switch(i) {
-    case 0:
+	case 0:
+    filterRequest(
+        {
+        type : "3",
+        name : name[0].value,
+        }
+    );
+	break;
+    case 1:
     filterRequest(
         {
         type: "2",
@@ -349,7 +358,7 @@ function filter_aux() {
         }
     );
     break;
-    case 1:
+    case 2:
     filterRequest(
         {
         type : "1",
@@ -359,7 +368,7 @@ function filter_aux() {
         }
     );
     break;
-    case 2:
+    case 3:
     filterRequest(
         {
         type: "2",

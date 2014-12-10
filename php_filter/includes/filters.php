@@ -1,6 +1,35 @@
 <?php
 include_once 'db_connection.php';
 
+function name_filter($mysqli, $name) {
+	$sql = $mysqli->prepare("SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip WHERE NAME LIKE ? GROUP BY NAME");
+	$name_param = "%{$name}%";
+	if (!$sql->bind_param('s', $name_param)) {
+    echo "Binding parameters failed: (" . $sql->errno . ") " . $sql->error;
+	}
+    if (!$sql->execute()) {
+    echo "Execute failed: (" . $sql->errno . ") " . $sql->error;
+	};
+	$results = $sql->bind_result($satname, $lat, $lon, $norad, $insertepoch, $direction);
+    // Start XML file, create parent node
+    $dom = new DOMDocument("1.0");
+    
+    $node = $dom->createElement("markers");
+    $parnode = $dom->appendChild($node);
+    header("Content-type: text/xml");
+    while($sql->fetch()){
+		$node = $dom->createElement("marker");
+		$newnode = $parnode->appendChild($node);
+		$newnode->setAttribute("name", $satname);
+		$newnode->setAttribute("lat", $lat);
+		$newnode->setAttribute("lon", $lon);
+		$newnode->setAttribute("id", $norad);
+		$newnode->setAttribute("time", $insertepoch);
+		$newnode->setAttribute("dir", $direction);
+	}
+    echo $dom->saveXML();
+}
+
 function nearest_filter($mysqli, $param) {
     $sql = "SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip GROUP BY NAME";
     $results = $mysqli->query($sql);

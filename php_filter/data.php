@@ -14,3 +14,6 @@ else if ($filter_type == '2') {
     unset($param["type"]);
     filter($mysqli, $param);
 }
+else if ($filter_type == '3') {
+	name_filter($mysqli, $param['name']);
+}

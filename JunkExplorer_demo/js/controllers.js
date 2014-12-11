@@ -342,7 +342,7 @@ function filter_aux() {
 
     switch(i) {
 	case 0:
-    filterRequest(
+	return filterRequest(
         {
         type : "3",
         name : name[0].value,
@@ -350,7 +350,7 @@ function filter_aux() {
     );
 	break;
     case 1:
-    filterRequest(
+	return filterRequest(
         {
         type: "2",
         LON: {"0":minLon[0].value+" "+maxLon[0].value,},
@@ -359,7 +359,7 @@ function filter_aux() {
     );
     break;
     case 2:
-    filterRequest(
+	return filterRequest(
         {
         type : "1",
         LON : maxLon[1].value,
@@ -369,7 +369,7 @@ function filter_aux() {
     );
     break;
     case 3:
-    filterRequest(
+	return filterRequest(
         {
         type: "2",
         LON: {"0":"0 360"},
@@ -379,29 +379,60 @@ function filter_aux() {
     }
 }
 
+var last_object;
+
 /*
   The filterRequest function jakes a JS object using the AND/OR filter method
   designed by Sunny. It will apply that filter to the map.
 */
 function filterRequest(object) {
-var xmlhttp = new XMLHttpRequest();
+    last_object=object;
+
+    var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "../php_filter/data.php");
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4) {
-            var xml=xmlhttp.responseXML;
-            deleteMarkers();
-            var markers = xml.documentElement.getElementsByTagName("marker");
-            for (var i = 0; i < markers.length; i++) {
-                addMarker(markers[i]);
-            }
+		var xml=xmlhttp.responseXML;
+		deleteMarkers();
+		var markers = xml.documentElement.getElementsByTagName("marker");
+		for (var i = 0; i < markers.length; i++) {
+                    addMarker(markers[i]);
+	    }
         }
     };
-
+    
     xmlhttp.send(JSON.stringify(object));
 }
 
+
+/*
+  Download feature uses HTML5 download tags.
+  TODO: find a more compatible way of doing this.
+*/
+function linkDownload(a) {
+    if(!last_object)
+	filter_aux();
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "../php_filter/data.php",false);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    var xmlText;
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4) {
+	    console.log(xmlhttp.responseXML);
+	    xmlText=(new XMLSerializer()).serializeToString(xmlhttp.responseXML);
+	    console.log(xmlText);
+
+	    contentType =  'data:application/octet-stream,';
+	    uriContent = contentType + encodeURIComponent(xmlText);
+	    a.setAttribute('href', uriContent);
+	    a.setAttribute('download', 'data.xml');
+	}
+    };
+    
+    xmlhttp.send(JSON.stringify(last_object));
+}
 
 /*
   Clear all the printed points and wikipedia from screen.

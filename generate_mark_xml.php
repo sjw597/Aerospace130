@@ -13,8 +13,6 @@
 	
 	// This is for user account location preference.
 	if (login_check($acc_conn) == true) {
-	    $node = $dom->createElement("location");
-		$newnode = $parnode->appendChild($node);
 		$uid = $_SESSION['user_id'];
 		$sql = 'SELECT distinct lattitude, longitude, city.city_name FROM memberloc, city 
 				WHERE memberloc.regionid = city.region_id AND
@@ -22,9 +20,13 @@
 					memberloc.id = ' . $uid;
 		$results = $conn->query($sql);
 		$user_coordinates = $results->fetch_assoc();
+		if ($user_coordinates != null){
+	    $node = $dom->createElement("location");
+		$newnode = $parnode->appendChild($node);
 		$newnode->setAttribute("lat", $user_coordinates['lattitude']);
         $newnode->setAttribute("lon", $user_coordinates['longitude']);
 		$newnode->setAttribute("city", $user_coordinates['city_name']);
+		}
 	}
 
     $sql = 'SELECT NAME, LAT, LON, NORAD_CAT_ID, max(INSERT_EPOCH), DIRECTION FROM tip GROUP BY NAME';

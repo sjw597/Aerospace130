@@ -7,6 +7,7 @@
     </head>
     <body>
         <h1>Registration successful!</h1>
-        <p>You can now go back to the <a href="login.php">login page</a> and log in</p>
+        <p>You will automatically be redirected in 3 seconds.</p>
+		<meta http-equiv="refresh" content="3;url=../JunkExplorer_demo/index.php" />
     </body>
 </html>

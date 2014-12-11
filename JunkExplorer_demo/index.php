@@ -65,7 +65,8 @@ include_once '../accounts/includes/functions.php';
       <div class='col-sm-1 col-md-1 sidebar'>
         <ul class='nav nav-sidebar'>
           <li><a id='utilities_0' style='' href="#/demo1" onclick="clearScreen();">Search & Filter</a></li>
-          <li><a id='utilities_1' style='' href="#/demo1" onclick="printPoints();">Export Points</a></li>
+          <li><a id='utilities_1' style='' href="#/demo1" onclick="printPoints();">View GPS Data</a></li>
+          <li><a id='utilities_2' style='' href="#/demo1" onclick="linkDownload(this);">Download XML</a></li>
 		  <?php if ($logged == 'in'){ ?>
 		  <li><a style='' href="#/account_settings">Account settings</a></li>
 		  <?php } ?>

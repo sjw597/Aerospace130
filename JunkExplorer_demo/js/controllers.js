@@ -342,7 +342,7 @@ function filter_aux() {
 
     switch(i) {
 	case 0:
-	return filterRequest(
+	filterRequest(
         {
         type : "3",
         name : name[0].value,
@@ -350,7 +350,7 @@ function filter_aux() {
     );
 	break;
     case 1:
-	return filterRequest(
+	filterRequest(
         {
         type: "2",
         LON: {"0":minLon[0].value+" "+maxLon[0].value,},
@@ -359,7 +359,7 @@ function filter_aux() {
     );
     break;
     case 2:
-	return filterRequest(
+	filterRequest(
         {
         type : "1",
         LON : maxLon[1].value,
@@ -369,7 +369,7 @@ function filter_aux() {
     );
     break;
     case 3:
-	return filterRequest(
+	filterRequest(
         {
         type: "2",
         LON: {"0":"0 360"},
